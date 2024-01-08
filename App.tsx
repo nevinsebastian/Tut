@@ -16,10 +16,11 @@ return(
       <Text>Hello World!!</Text>
       <Text>Hello World!!</Text>
       <Text>Hello World!!</Text>
+      <Text>Hello World!!</Text>
+
     </View>
   </SafeAreaView>
 )
-  
 }
 
 
