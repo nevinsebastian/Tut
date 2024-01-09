@@ -12,5 +12,6 @@ export default function FlatCards() {
 const styles = StyleSheet.create({
     headingText:{
         fontSize:24
+        
     },
 })
