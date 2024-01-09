@@ -4,9 +4,13 @@ import React from 'react'
 export default function FlatCards() {
   return (
     <View>
-      <Text>FlatCards</Text>
+      <Text style={styles.headingText}>FlatCards</Text>
     </View>
   )
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    headingText:{
+        fontSize:24
+    },
+})
