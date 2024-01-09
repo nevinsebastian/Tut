@@ -6,7 +6,6 @@ const App = () => {
   return (
     <SafeAreaView>
       <ScrollView>
-      <Text>App</Text>
       <FlatCards/>
       </ScrollView>
     </SafeAreaView>
