@@ -74,5 +74,5 @@ Once the app is running, you can use the emulator to navigate through the app. T
 If you encounter any issues or have feedback, please create an issue on the GitHub repository: [https://github.com/nevinsebastian/Tut/issues](https://github.com/nevinsebastian/Tut/issues).
 
 Enjoy testing the Adventure Activity Booking App!
-```
+
 
