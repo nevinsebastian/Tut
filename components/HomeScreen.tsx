@@ -1,6 +1,6 @@
-// HomeScreen.tsx
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, Image } from 'react-native';
+import { View, FlatList, StyleSheet } from 'react-native';
+import { Card, Title, Paragraph, Appbar } from 'react-native-paper';
 
 interface Activity {
   id: number;
@@ -31,34 +31,72 @@ const HomeScreen: React.FC = () => {
   }, []);
 
   return (
-    <View>
-      <Text>Activities Section</Text>
+    <View style={styles.container}>
+      <Appbar.Header style={styles.appbar}>
+        <Appbar.Content title="Adventure Activities" />
+      </Appbar.Header>
       <FlatList
         data={activities}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <View>
-            <Text>{item.name}</Text>
-            <Text>{item.description}</Text>
-            <Text>Price: {item.price}</Text>
-            <Text>Location: {item.location}</Text>
-            <Image source={{ uri: item.image }} style={{ width: 200, height: 200 }} />
-            {/* Display time slots if available */}
-            {item.time_slots.length > 0 && (
-              <View>
-                <Text>Available Time Slots:</Text>
-                {item.time_slots.map((timeSlot: any) => (
-                  <Text key={timeSlot.id}>
-                    {timeSlot.start_time} - {timeSlot.end_time}
-                  </Text>
-                ))}
-              </View>
-            )}
-          </View>
+          <Card style={styles.card}>
+            <Card.Cover source={{ uri: item.image }} />
+            <Card.Content>
+              <Title style={styles.title}>{item.name}</Title>
+              <Paragraph style={styles.description}>{item.description}</Paragraph>
+              <Paragraph style={styles.price}>Price: {item.price}</Paragraph>
+              <Paragraph style={styles.location}>Location: {item.location}</Paragraph>
+            </Card.Content>
+          </Card>
         )}
       />
     </View>
   );
 };
+
+const pastelTheme = {
+  colors: {
+    primary: '#87CEEB', // Light Sky Blue - Pastel
+    background: '#F0F8FF', // Alice Blue - Light Pastel background color
+    card: '#B0E0E6', // Powder Blue - Light Pastel card color
+    text: '#333', // Dark text color
+  },
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: pastelTheme.colors.background,
+  },
+  appbar: {
+    backgroundColor: pastelTheme.colors.primary,
+    elevation: 4,
+  },
+  card: {
+    marginVertical: 5,
+    elevation: 5,
+    backgroundColor: pastelTheme.colors.card,
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: pastelTheme.colors.text,
+  },
+  description: {
+    fontSize: 14,
+    color: pastelTheme.colors.text,
+    marginBottom: 5,
+  },
+  price: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: pastelTheme.colors.text,
+    marginBottom: 5,
+  },
+  location: {
+    fontSize: 14,
+    color: pastelTheme.colors.text,
+  },
+});
 
 export default HomeScreen;
