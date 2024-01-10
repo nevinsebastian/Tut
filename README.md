@@ -1,9 +1,8 @@
-Certainly! Below is a simple template for a README file that you can provide to the backend developer to help them test your React Native app. This assumes that the backend developer will be running the backend server locally for testing purposes.
 
 ```markdown
 # Adventure Activity Booking App
 
-Welcome to the Adventure Activity Booking App! This React Native app allows users to browse and book adventure activities. The backend API provides the necessary data for the app.
+Welcome to the Adventure Activity Booking App! This React Native app allows users to browse and book adventure activities. The backend API is hosted on AWS.
 
 ## Prerequisites
 
@@ -17,8 +16,8 @@ Before you start testing the app, make sure you have the following installed on 
 1. Clone the repository:
 
 ```bash
-git clone [repository_url]
-cd [repository_directory]
+git clone https://github.com/nevinsebastian/Tut.git
+cd Tut
 ```
 
 2. Install dependencies:
@@ -29,7 +28,22 @@ npm install
 
 ## Backend Setup
 
-Make sure the backend server is up and running. The backend server provides the API for the app.
+The backend server is hosted on AWS. Please contact the project administrator to obtain the AWS API endpoint and any required credentials.
+
+## Configuring the App
+
+Once you have the necessary backend information, open the `src/config/apiConfig.js` file, and update the `BASE_URL` with the AWS API endpoint.
+
+```javascript
+// src/config/apiConfig.js
+
+const API_CONFIG = {
+  BASE_URL: 'YOUR_AWS_API_ENDPOINT',
+  // ... other configurations
+};
+
+export default API_CONFIG;
+```
 
 ## Run the App
 
@@ -57,11 +71,8 @@ Once the app is running, you can use the emulator to navigate through the app. T
 
 ## Issues and Feedback
 
-If you encounter any issues or have feedback, please create an issue on the GitHub repository: [link_to_repository_issues](#).
+If you encounter any issues or have feedback, please create an issue on the GitHub repository: [https://github.com/nevinsebastian/Tut/issues](https://github.com/nevinsebastian/Tut/issues).
 
 Enjoy testing the Adventure Activity Booking App!
 ```
 
-Replace `[repository_url]` and `[repository_directory]` with the actual URL and directory of your repository. Also, provide the backend developer with information about how to set up and run the backend server locally.
-
-Feel free to customize the README based on the specific details of your project.
