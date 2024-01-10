@@ -1,17 +1,20 @@
-// App.tsx
+// App.js
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './components/HomeScreen';
+import BookingScreen from './components/BookingScreen';
+import TimeSlotSelection from './components/TimeSlotSelection';  // Import the TimeSlotSelection component
 
 const Stack = createNativeStackNavigator();
 
-const App: React.FC = () => {
+const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
-        {/* Add more screens as needed */}
+        <Stack.Screen name="Booking" component={BookingScreen} />
+        <Stack.Screen name="TimeSlotSelection" component={TimeSlotSelection} />  {/* Add this line */}
       </Stack.Navigator>
     </NavigationContainer>
   );
