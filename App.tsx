@@ -1,17 +1,20 @@
-import { View, Text, ScrollView, SafeAreaView } from 'react-native'
-import React from 'react'
-import FlatCards from './components/FlatCards'
-import ElivatedCards from './components/ElivatedCards'
+// App.tsx
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import HomeScreen from './components/HomeScreen';
 
-const App = () => {
+const Stack = createNativeStackNavigator();
+
+const App: React.FC = () => {
   return (
-    <SafeAreaView>
-    <ScrollView>
-      <FlatCards/>
-    <ElivatedCards/>
-    </ScrollView>
-    </SafeAreaView>
-  )
-}
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={HomeScreen} />
+        {/* Add more screens as needed */}
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
 
-export default App
+export default App;
