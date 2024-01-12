@@ -29,8 +29,9 @@ const HomeScreen = () => {
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity
-            onPress={() => navigation.navigate('Booking', { activity: item })}
-          >
+          onPress={() => navigation.navigate('Booking', { activity: item })}
+        >
+        
             <Card elevation={5} style={{ margin: 10 }}>
               {/* Display activity details */}
               <Card.Cover source={{ uri: item.image }} />

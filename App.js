@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './components/HomeScreen';
 import BookingScreen from './components/BookingScreen';
-import TimeSlotSelection from './components/TimeSlotSelection';  // Import the TimeSlotSelection component
+import TimeSlotSelection from './components/TimeSlotSelection';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,7 +14,7 @@ const App = () => {
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Booking" component={BookingScreen} />
-        <Stack.Screen name="TimeSlotSelection" component={TimeSlotSelection} />  {/* Add this line */}
+        <Stack.Screen name="TimeSlotSelection" component={TimeSlotSelection} />
       </Stack.Navigator>
     </NavigationContainer>
   );
