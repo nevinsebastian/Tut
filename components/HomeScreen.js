@@ -1,14 +1,18 @@
-// HomeScreen.js
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import { Card, Title, Paragraph, Searchbar } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { View, FlatList, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Card, Title, Paragraph, Searchbar, BottomNavigation } from 'react-native-paper';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import { useNavigation } from '@react-navigation/native';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
+
+
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [activities, setActivities] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [bottomTab, setBottomTab] = useState('explore');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,8 +30,11 @@ const HomeScreen = () => {
 
   const onChangeSearch = (query) => setSearchQuery(query);
 
+  const handleBottomTabPress = (tab) => setBottomTab(tab);
+
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="white" />
       <Searchbar
         placeholder="Search"
         onChangeText={onChangeSearch}
@@ -41,30 +48,45 @@ const HomeScreen = () => {
         data={activities}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Booking', { activity: item })}
-          >
-            <Card elevation={5} style={styles.card}>
-              {/* Display activity details */}
-              <Card.Cover source={{ uri: item.image }} />
+          <TouchableOpacity onPress={() => navigation.navigate('Booking', { activity: item })}>
+            <Card elevation={0} style={styles.card}>
+              <Card.Cover source={{ uri: item.image }} style={styles.cardImage} />
               <Card.Content>
                 <Title style={styles.title}>{item.name}</Title>
                 <Paragraph style={styles.description}>{item.description}</Paragraph>
-                <Paragraph style={styles.price}>Price: {item.price}</Paragraph>
                 <Paragraph style={styles.location}>Location: {item.location}</Paragraph>
+                <Paragraph style={styles.price}>Price: ₹{item.price}</Paragraph>
               </Card.Content>
             </Card>
           </TouchableOpacity>
         )}
       />
-    </View>
+
+      <BottomNavigation
+        style={styles.bottomNavigation}
+        navigationState={{
+          index: 0,
+          routes: [
+            { key: 'explore', title: 'Explore', icon: 'compass-outline' },
+            { key: 'saved', title: 'Saved', icon: 'heart-outline' },
+            { key: 'myOrders', title: 'My Orders', icon: 'package-variant' },
+            { key: 'profile', title: 'Profile', icon: 'account-outline' },
+          ],
+        }}
+        onIndexChange={(index) => handleBottomTabPress(index === 0 ? 'explore' : 'saved')}
+        renderScene={() => null}
+        activeColor="#007AFF"
+        inactiveColor="#000000"
+      />
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white', // Set background color to white
+    backgroundColor: 'white',
+    paddingTop: getStatusBarHeight(true),
   },
   searchBar: {
     elevation: 2,
@@ -77,25 +99,47 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
   },
   card: {
-    margin: 10,
-    backgroundColor: 'white', // Set card background color to white
+    marginHorizontal: 10,
+    marginVertical: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+  cardImage: {
+    height: 300,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
   },
   title: {
-    fontSize: 24,
+    fontSize: 16,
     fontWeight: 'bold',
-    color: 'black', // Set title color to black
+    color: 'black',
+    marginBottom: -5,
   },
   description: {
-    fontSize: 16,
-    color: 'black', // Set description color to black
+    fontSize: 12,
+    color: 'grey',
+    marginBottom: -3,
   },
   price: {
-    fontSize: 16,
-    color: 'black', // Set price color to black
+    fontSize: 14,
+    color: 'black',
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
+    marginTop: -5,
   },
   location: {
-    fontSize: 16,
-    color: 'black', // Set location color to black
+    fontSize: 12,
+    color: 'grey',
+    marginBottom: 0,
+  },
+  bottomNavigation: {
+    elevation: 8,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1,
   },
 });
 
