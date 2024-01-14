@@ -111,18 +111,18 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 12,
   },
   title: {
-    fontSize: 16,
+    fontSize: 13,
     fontWeight: 'bold',
     color: 'black',
-    marginBottom: -5,
+    marginBottom: -13,
   },
   description: {
     fontSize: 12,
     color: 'grey',
-    marginBottom: -3,
+    marginBottom: -8,
   },
   price: {
-    fontSize: 14,
+    fontSize: 11,
     color: 'black',
     fontWeight: 'bold',
     textDecorationLine: 'underline',
