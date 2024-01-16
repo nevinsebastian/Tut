@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
+import { View, FlatList, TouchableOpacity, StyleSheet, StatusBar, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Card, Title, Paragraph, Searchbar, BottomNavigation } from 'react-native-paper';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
-
-
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [activities, setActivities] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [bottomTab, setBottomTab] = useState('explore');
+  const scrollY = new Animated.Value(0);
+  const scrollPosition = new Animated.Value(0);
+  const [footerVisible, setFooterVisible] = useState(true);
+  const [searchBarVisible, setSearchBarVisible] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,18 +34,53 @@ const HomeScreen = () => {
 
   const handleBottomTabPress = (tab) => setBottomTab(tab);
 
+  const handleScroll = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
+    { useNativeDriver: false },
+  );
+
+  const handleScrollEnd = Animated.event(
+    [{ nativeEvent: { contentOffset: { y: scrollPosition } } }],
+    { useNativeDriver: false },
+  );
+
+  const footerTranslateY = scrollY.interpolate({
+    inputRange: [0, 50],
+    outputRange: [0, 50],
+    extrapolate: 'clamp',
+  });
+
+  const footerOpacity = scrollPosition.interpolate({
+    inputRange: [0, 50],
+    outputRange: [1, 0],
+    extrapolate: 'clamp',
+  });
+
+  const searchBarTranslateY = scrollY.interpolate({
+    inputRange: [0, 50],
+    outputRange: [0, -50],
+    extrapolate: 'clamp',
+  });
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
-      <Searchbar
-        placeholder="Search"
-        onChangeText={onChangeSearch}
-        value={searchQuery}
-        style={styles.searchBar}
-        icon={({ color, size }) => (
-          <FontAwesome5Icon name="search" color={color} size={size} style={styles.searchIcon} />
-        )}
-      />
+      <Animated.View
+        style={[
+          styles.searchBarContainer,
+          { transform: [{ translateY: searchBarTranslateY }] },
+        ]}
+      >
+        <Searchbar
+          placeholder="Search"
+          onChangeText={onChangeSearch}
+          value={searchQuery}
+          style={styles.searchBar}
+          icon={({ color, size }) => (
+            <FontAwesome5Icon name="search" color={color} size={size} style={styles.searchIcon} />
+          )}
+        />
+      </Animated.View>
       <FlatList
         data={activities}
         keyExtractor={(item) => item.id.toString()}
@@ -60,24 +97,29 @@ const HomeScreen = () => {
             </Card>
           </TouchableOpacity>
         )}
+        onScroll={handleScroll}
+        onScrollEndDrag={handleScrollEnd}
+        scrollEventThrottle={16}
       />
 
-      <BottomNavigation
-        style={styles.bottomNavigation}
-        navigationState={{
-          index: 0,
-          routes: [
-            { key: 'explore', title: 'Explore', icon: 'compass-outline' },
-            { key: 'saved', title: 'Saved', icon: 'heart-outline' },
-            { key: 'myOrders', title: 'My Orders', icon: 'package-variant' },
-            { key: 'profile', title: 'Profile', icon: 'account-outline' },
-          ],
-        }}
-        onIndexChange={(index) => handleBottomTabPress(index === 0 ? 'explore' : 'saved')}
-        renderScene={() => null}
-        activeColor="#007AFF"
-        inactiveColor="#000000"
-      />
+      <Animated.View style={[styles.bottomNavigation, { transform: [{ translateY: footerTranslateY }] }]}>
+        <BottomNavigation
+          navigationState={{
+            index: 0,
+            routes: [
+              { key: 'explore', title: 'Explore', icon: 'compass-outline' },
+              { key: 'saved', title: 'Saved', icon: 'heart-outline' },
+              { key: 'myOrders', title: 'My Orders', icon: 'package-variant' },
+              { key: 'profile', title: 'Profile', icon: 'account-outline' },
+            ],
+          }}
+          onIndexChange={(index) => handleBottomTabPress(index === 0 ? 'explore' : 'saved')}
+          renderScene={() => null}
+          activeColor="#007AFF"
+          inactiveColor="#000000"
+          style={styles.bottomNavigationContainer}
+        />
+      </Animated.View>
     </SafeAreaView>
   );
 };
@@ -86,14 +128,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    paddingTop: getStatusBarHeight(true),
   },
-  searchBar: {
+  searchBarContainer: {
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 2,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 1,
+  },
+  searchBar: {
+    marginHorizontal: 10,
   },
   searchIcon: {
     marginHorizontal: 10,
@@ -140,6 +189,12 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     zIndex: 1,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+  bottomNavigationContainer: {
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
 });
 
