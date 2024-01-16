@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { WebView } from 'react-native-webview';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Linking, useNavigation } from '@react-navigation/native';
+import { Calendar } from 'react-native-calendars';
 
 // Import Paper UI components
-import { Chip, Button } from 'react-native-paper';
+import { Chip, Button, TextInput, IconButton } from 'react-native-paper';
 
 const BookingScreen = ({ route }) => {
   const { activity } = route.params;
@@ -22,6 +23,13 @@ const BookingScreen = ({ route }) => {
       referrerpolicy="no-referrer-when-downgrade"
     ></iframe>
   `;
+
+  const [selectedDate, setSelectedDate] = useState('');
+
+  const onDayPress = (day) => {
+    setSelectedDate(day.dateString);
+    // You can perform additional actions on date selection
+  };
 
   return (
     <View style={styles.container}>
@@ -40,6 +48,13 @@ const BookingScreen = ({ route }) => {
 
           {/* Line below "Hosted by" */}
           <View style={styles.line} />
+
+          {/* Calendar */}
+          <Text style={styles.mapHeading}>Select Date</Text>
+          <Calendar
+            onDayPress={onDayPress}
+            markedDates={{ [selectedDate]: { selected: true, disableTouchEvent: true, selectedColor: 'orange' } }}
+          />
 
           {/* Dummy iframe for map */}
           <Text style={styles.mapHeading}>Where You'll Be</Text>
@@ -76,6 +91,7 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     flexGrow: 1,
+    paddingBottom:70
   },
   activityImage: {
     width: '100%',
@@ -98,7 +114,7 @@ const styles = StyleSheet.create({
   },
   providerName: {
     fontSize: 16,
-    color: 'black', // Adjust color as needed
+    color: 'black',
     marginTop: 8,
   },
   footer: {
@@ -108,15 +124,14 @@ const styles = StyleSheet.create({
     padding: 7,
     borderTopWidth: 1,
     borderTopColor: '#ddd',
-    borderTopLeftRadius: 10, // Adjust the value as needed
-    borderTopRightRadius: 10, // Adjust the value as needed
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
     backgroundColor: 'white',
   },
-  
   line: {
     height: 1,
     backgroundColor: '#ddd',
@@ -130,7 +145,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   mapContainer: {
-    aspectRatio: 1.5, // Adjust aspect ratio as needed
+    aspectRatio: 1.5,
     borderRadius: 8,
     overflow: 'hidden',
     marginBottom: 16,
