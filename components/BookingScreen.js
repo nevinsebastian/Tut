@@ -1,16 +1,27 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { WebView } from 'react-native-webview';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Linking, useNavigation } from '@react-navigation/native';
+
+// Import Paper UI components
+import { Chip, Button } from 'react-native-paper';
 
 const BookingScreen = ({ route }) => {
   const { activity } = route.params;
   const navigation = useNavigation();
 
-  const handleViewMapPress = () => {
-    const mapURL = 'https://maps.google.com'; // Replace with your map URL
-    Linking.openURL(mapURL);
-  };
+  const mapIframe = `
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3935.36066535252!2d76.33385267575912!3d9.477314581808796!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b0884ea4aec3cd9%3A0xd0b71fa3d92bac86!2sMullathuvallappu-%20Valiyachudukadu%20Rd%2C%20Mullathuvalappu%2C%20Alappuzha%2C%20Kerala!5e0!3m2!1sen!2sin!4v1705447233703!5m2!1sen!2sin"
+      width="100%"
+      height="300"
+      style="border:0;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+    ></iframe>
+  `;
 
   return (
     <View style={styles.container}>
@@ -20,21 +31,38 @@ const BookingScreen = ({ route }) => {
         <View style={styles.detailsContainer}>
           <Text style={styles.activityName}>{activity.name}</Text>
           <Text style={styles.description}>{activity.description}</Text>
-        </View>
 
-        <Text style={styles.viewMapText} onPress={handleViewMapPress}>
-          View on Map
-        </Text>
+          {/* Line above "Hosted by" */}
+          <View style={styles.line} />
+
+          {/* Render Provider Name */}
+          <Text style={styles.providerName}>{`Hosted by: ${activity.provider_name}`}</Text>
+
+          {/* Line below "Hosted by" */}
+          <View style={styles.line} />
+
+          {/* Dummy iframe for map */}
+          <Text style={styles.mapHeading}>Where You'll Be</Text>
+          <View style={styles.mapContainer}>
+            <WebView
+              source={{ html: mapIframe }}
+              style={styles.mapIframe}
+            />
+          </View>
+        </View>
       </ScrollView>
 
+      {/* Footer */}
       <View style={styles.footer}>
         <View>
-          <Text style={styles.priceText}>{`Price: ₹${activity.price}`}</Text>
+          {/* Custom PaperUI Chip for Price */}
+          <Chip >{`₹${activity.price}`}</Chip>
         </View>
         <View>
-          <TouchableOpacity style={styles.bookNowButton} >
-            <Text style={styles.bookNowButtonText}>Book Now</Text>
-          </TouchableOpacity>
+          {/* Paper UI Default Button for "Book Now" */}
+          <Button mode="contained" style={styles.bookNowButton}>
+            Book Now
+          </Button>
         </View>
       </View>
     </View>
@@ -61,45 +89,59 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 10,
-    color:'black'
+    color: 'black',
   },
   description: {
     fontSize: 16,
     marginBottom: 8,
     color: 'black',
   },
-  viewMapText: {
+  providerName: {
     fontSize: 16,
-    color: '#007AFF',
-    textDecorationLine: 'underline',
+    color: 'black', // Adjust color as needed
     marginTop: 8,
-    textAlign: 'center',
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
+    padding: 7,
     borderTopWidth: 1,
     borderTopColor: '#ddd',
+    borderTopLeftRadius: 10, // Adjust the value as needed
+    borderTopRightRadius: 10, // Adjust the value as needed
     position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
     backgroundColor: 'white',
   },
-  priceText: {
-    fontSize: 16,
+  
+  line: {
+    height: 1,
+    backgroundColor: '#ddd',
+    marginVertical: 8,
+  },
+  mapHeading: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 16,
     marginBottom: 8,
+    color: 'black',
+  },
+  mapContainer: {
+    aspectRatio: 1.5, // Adjust aspect ratio as needed
+    borderRadius: 8,
+    overflow: 'hidden',
+    marginBottom: 16,
+  },
+  mapIframe: {
+    flex: 1,
   },
   bookNowButton: {
     backgroundColor: '#007AFF',
-    padding: 10,
+    padding: 1,
     borderRadius: 8,
-  },
-  bookNowButtonText: {
-    color: 'white',
-    fontWeight: 'bold',
   },
 });
 
