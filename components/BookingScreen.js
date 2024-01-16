@@ -58,14 +58,15 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   activityName: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 12,
+    marginBottom: 10,
+    color:'black'
   },
   description: {
     fontSize: 16,
     marginBottom: 8,
-    color: '#555',
+    color: 'black',
   },
   viewMapText: {
     fontSize: 16,

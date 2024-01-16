@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { View, ScrollView, FlatList, TouchableOpacity, StyleSheet, StatusBar, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Card, Title, Paragraph, Searchbar, BottomNavigation, Chip } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome5';  // Updated import for FontAwesome5
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
-// ... (previous imports remain unchanged)
+// ... (other imports remain unchanged)
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -15,7 +16,6 @@ const HomeScreen = () => {
   const [bottomTab, setBottomTab] = useState('explore');
   const scrollY = new Animated.Value(0);
   const scrollPosition = new Animated.Value(0);
-  const [footerVisible, setFooterVisible] = useState(true);
   const [searchBarVisible, setSearchBarVisible] = useState(true);
 
   const [activityCategories, setActivityCategories] = useState([
@@ -42,8 +42,6 @@ const HomeScreen = () => {
 
   const onChangeSearch = (query) => setSearchQuery(query);
 
-  const handleBottomTabPress = (tab) => setBottomTab(tab);
-
   const handleScroll = Animated.event(
     [{ nativeEvent: { contentOffset: { y: scrollY } } }],
     { useNativeDriver: false },
@@ -54,27 +52,22 @@ const HomeScreen = () => {
     { useNativeDriver: false },
   );
 
-  const footerTranslateY = scrollY.interpolate({
-    inputRange: [0, 50],
-    outputRange: [0, 50],
-    extrapolate: 'clamp',
-  });
-
-  const footerOpacity = scrollPosition.interpolate({
-    inputRange: [0, 50],
-    outputRange: [1, 0],
-    extrapolate: 'clamp',
-  });
-
   const searchBarTranslateY = scrollY.interpolate({
     inputRange: [0, 50],
     outputRange: [0, -50],
     extrapolate: 'clamp',
   });
 
+  const footerTranslateY = scrollY.interpolate({
+    inputRange: [0, 50],
+    outputRange: [0, 50],
+    extrapolate: 'clamp',
+  });
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="white" />
+
       <Animated.View
         style={[
           styles.searchBarContainer,
@@ -92,7 +85,11 @@ const HomeScreen = () => {
         />
       </Animated.View>
 
-      <ScrollView>
+      <ScrollView
+        onScroll={handleScroll}
+        onScrollEndDrag={handleScrollEnd}
+        scrollEventThrottle={16}
+      >
         {/* Horizontal Scrollable Section for Activity Categories */}
         <View style={styles.categoryContainer}>
           <FlatList
@@ -127,9 +124,6 @@ const HomeScreen = () => {
               </Card>
             </TouchableOpacity>
           )}
-          onScroll={handleScroll}
-          onScrollEndDrag={handleScrollEnd}
-          scrollEventThrottle={16}
         />
       </ScrollView>
 
@@ -144,11 +138,13 @@ const HomeScreen = () => {
               { key: 'profile', title: 'Profile', icon: 'account-outline' },
             ],
           }}
-          onIndexChange={(index) => handleBottomTabPress(index === 0 ? 'explore' : 'saved')}
           renderScene={() => null}
           activeColor="#007AFF"
           inactiveColor="#000000"
           style={styles.bottomNavigationContainer}
+          renderIcon={({ route, color }) => (
+            <Icon name={route.icon} size={20} color={color} style={styles.icon} />
+          )}
         />
       </Animated.View>
     </SafeAreaView>
@@ -235,6 +231,9 @@ const styles = StyleSheet.create({
   bottomNavigationContainer: {
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+  },
+  icon: {
+    marginRight: 5,
   },
 });
 
