@@ -25,12 +25,25 @@ const BookingScreen = ({ route }) => {
   `;
 
   const [selectedDate, setSelectedDate] = useState('');
+  const [numberOfPeople, setNumberOfPeople] = useState(1);
 
   const onDayPress = (day) => {
     setSelectedDate(day.dateString);
     // You can perform additional actions on date selection
   };
 
+
+  const decrementPeople = () => {
+    if (numberOfPeople > 1) {
+      setNumberOfPeople(numberOfPeople - 1);
+    }
+  };
+
+  const incrementPeople = () => {
+    setNumberOfPeople(numberOfPeople + 1);
+  };
+
+  
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
