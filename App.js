@@ -13,7 +13,7 @@ const App = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
-          headerShown: false, // Hide the default header for all screens
+          headerShown: false,
         }}
       >
         <Stack.Screen name="Home" component={HomeScreen} />
@@ -25,3 +25,6 @@ const App = () => {
 };
 
 export default App;
+
+
+
