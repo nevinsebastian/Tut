@@ -2,7 +2,8 @@
 ```markdown
 # Adventure Activity Booking App
 
-Welcome to the Adventure Activity Booking App! This React Native app allows users to browse and book adventure activities. The backend API is hosted on AWS.
+
+
 
 ## Prerequisites
 
