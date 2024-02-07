@@ -17,7 +17,7 @@ Before you start testing the app, make sure you have the following installed on 
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/nevinsebastian/Tut.git
+git clone https://githubcom/nevinsebastian/Tut.git
 cd Tut
 ```
 
